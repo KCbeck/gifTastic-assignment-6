@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Favorite Items</title>
+  <style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Item Search</h1>
+
+     <!-- Rendered Buttons will get Dumped Here  -->
+    <div id="buttons-view"></div>
+
+    <form id="item-form">
+      <label for="data-item">Add a Item, Yo!</label>
+      <input type="text" id="item-input"><br>
+
+      <!-- Button triggers new item to be added -->
+      <input id="add-item" type="submit" value="add an item to search">
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      // Initial array of items
+      var items = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+
+      // Generic function for capturing the item name from the data-attribute
+      function alertItemName() {
+        var itemName = $(this).attr("data-name");
+
+        alert(itemName);
+      }
+
+      // Function for displaying item data
+      function renderButtons() {
+
+        // Deleting the items prior to adding new items
+        // (this is necessary otherwise we will have repeat buttons)
+        $("#buttons-view").empty();
+
+        // Looping through the array of items
+        for (var i = 0; i < items.length; i++) {
+
+          // Then dynamicaly generating buttons for each item in the array
+          // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
+          var a = $("<button>");
+          // Adding a class of item to our button
+          a.addClass("item");
+          // Adding a data-attribute
+          a.attr("data-name", items[i]);
+          // Providing the initial button text
+          a.text(items[i]);
+          // Adding the button to the HTML
+          $("#buttons-view").append(a);
+        }
+      }
+
+      // This function handles events where one button is clicked
+      $("#add-item").on("click", function(event) {
+        // Preventing the buttons default behavior when clicked (which is submitting a form)
+        event.preventDefault();
+        // This line grabs the input from the textbox
+        var item = $("#item-input").val().trim();
+
+        // Adding the item from the textbox to our array
+        items.push(item);
+
+        // Calling renderButtons which handles the processing of our item array
+        renderButtons();
+
+      });
+
+      // Function for displaying the item info
+      // We're adding a click event listener to all elements with the class "item"
+      // We're adding the event listener to the document because it will work for dynamically generated elements
+      // $(".items").on("click") will only add listeners to elements that are on the page at that time
+      $(document).on("click", ".item", alertItemName);
+
+      // Calling the renderButtons function to display the intial buttons
+      renderButtons();
+    </script>
+  </div>
+</body>
+
+</html>
