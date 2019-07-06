@@ -1,0 +1,45 @@
+body {
+    background-image: url("../images/American.jpg") !important;
+    max-width: 96%;
+    margin-left:1%;
+    margin-right:1%;
+   }
+
+#pleasePick{
+    color: white;
+}
+.gifs-appear-here {
+    display: flex;
+}
+img{
+    width: 300px;
+    height: 200px;
+    position: center;
+    margin-left: 2%;
+   
+
+}
+#buttons-view{
+    display: inline-block;
+    background-color:rgba(192,192,192,0.6);
+}
+.data-item{
+    display: inline-block !important;
+    margin-left:5px;
+    margin-right:5px;
+    margin-top: 20px;
+    width: 19% !important;
+    height: 5%;
+    align-content:center;
+    font-weight: bold;
+    font-size: 25px;
+    color: #004080;
+    background-color:rgba(192,192,192,0.3);
+    }
+ .header{
+    background-color:rgba(192,192,192,0.1);
+    width: 40%;
+    text-align: center;
+    margin-left: 30%;
+    margin-right:30%;
+ }

@@ -1,83 +1,74 @@
-// create an array of shows - in this case, awesome 90's tv shows
-var shows = ["Saved by the Bell", "Boy Meets World", "Buffy the Vampire Slayer", "Full House", "Twin Peaks", "The X-Files", "Clarissa Explains It All", "Seinfeld", "Rocko's Modern Life", "Are You Afraid of the Dark", "Home Improvement", "Doug", "My So-Called Life", "Family Matters", "Daria"];
+// Initial array of items
+var items = ["Infantry","Ricky Bobby", "Mercenaries", "Iraqi Fails", "Obama fails", "Marines", "Texas", "Pflugerville", "Tanks" , "Tractors", "Emerica","Warped Tour"];
 
-// creates buttons for each of these
-function makeButtons(){ 
-	// deletes the shows prior to adding new shows so there are no repeat buttons
-	$('#buttonsView').empty();
-	// loops through the shows array
-	for (var i = 0; i < shows.length; i++){
-		// dynamically makes buttons for every show in the array
-		var a = $('<button>') 
-		a.addClass('show'); // add a class
-		a.attr('data-name', shows[i]); // add a data-attribute
-		a.text(shows[i]); // make button text
-		$('#buttonsView').append(a); // append the button to buttonsView div
-	}
+// Function for displaying item data
+function renderButtons() {
+  // Deleting the item buttons prior to adding new item buttons
+  // (this is necessary otherwise we will have repeat buttons)
+  $("#buttons-view").empty();
+  // Looping through the array of items
+  for (var i = 0; i < items.length; i++) {
+    var add = $("<button>");
+    add.attr("data-item", items[i]);
+    add.text(items[i]);
+    $("#buttons-view").append(add);
+    }
 }
 
-// handles addShow button event
-$("#addShow").on("click", function(){
-
-	// grabs the user show input
-	var show = $("#show-input").val().trim();
-	// that input is now added to the array
-	shows.push(show);
-	// the makeButtons function is called, which makes buttons for all my shows plus the user show
-	makeButtons();
-	// this line is so users can hit "enter" instead of clicking the submit button
-	return false; 
-})
-
-// function to display gifs
-function displayGifs(){
-	var show = $(this).attr("data-name");
-	var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + show + "&limit=9&api_key=dc6zaTOxFJmzC";
-
-		// creates ajax call
-		$.ajax({url: queryURL, method: "GET"}).done(function (response) {
-			console.log(response.data);
-			// save results as a variable
-			var results = response.data;
-			// for loop goes through each gif and adds these variables
-			for (var i = 0; i < results.length; i++) {
-				// creates a generic div to hold the results
-				var gifDiv = $('<div class=gifs>');
-				var showGif = $('<img>');
-					showGif.attr('src', results[i].images.fixed_height_still.url);
-					// shows the rating on hover
-					showGif.attr('title', "Rating: " + results[i].rating);
-					showGif.attr('data-still', results[i].images.fixed_height_still.url);
-					showGif.attr('data-state', 'still');
-					showGif.addClass('gif');
-					showGif.attr('data-animate', results[i].images.fixed_height.url);
-				// var rating = results[i].rating;
-				// var p = $('<p>').text('Rating: ' + rating);
-				gifDiv.append(showGif)
-				// gifDiv.append(p)
-
-				$("#gifsView").prepend(gifDiv);
-			}
-			
-		});
-}
-
-// function for animating gifs
-$(document).on('click', '.gif', function(){
-	var state = $(this).attr('data-state');
-		if ( state == 'still'){
-                $(this).attr('src', $(this).data('animate'));
-                $(this).attr('data-state', 'animate');
-            }else{
-                $(this).attr('src', $(this).data('still'));
-                $(this).attr('data-state', 'still');
-            };
+// This function handles events where one button is clicked
+$("#add-item").on("click", function(event) {
+  event.preventDefault();
+  var item = $("#item-input").val().trim();
+  $("#item-input").val("");
+  $("#item-input").addClass("america");
+  items.push(item);
+  renderButtons();
 });
+  // Calling the renderButtons function at least once to display the initial list of items
+  renderButtons();
+// Event listener for all button elements
+$("body").on("click", "button", function() {
+      // In this case, the "this" keyword refers to the button that was clicked
+      var item = $(this).attr("data-item");
+      // Constructing a URL to search Giphy for the name of the item who said the quote
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        item + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10";
 
+      // Performing our AJAX GET request
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+        // After the data comes back from the API
+        .then(function(response) {
+          // Storing an array of results in the results variable
+          var results = response.data;
 
-
-// function for displaying show gifs
-$(document).on("click", ".show", displayGifs);
-
-// initially calls the makeButtons function
-makeButtons();
+          // Looping over every result item
+          for (var i = 0; i < results.length; i++) {
+            // Only taking action if the photo has an appropriate rating
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+              // Creating a div for the gif
+              var gifDiv = $("<div>");
+                gifDiv.addClass("data-item");
+              // Storing the result item's rating
+              var rating = results[i].rating;
+              // Creating a paragraph tag with the result item's rating
+              var p = $("<p>").text("Rating: " + rating);
+              // Creating an image tag
+              var itemImage = $("<img>");
+              $("itemImage").addClass("photo")
+          
+              // Giving the image tag an src attribute of a proprty pulled off the
+              // result item
+              itemImage.attr("src", results[i].images.fixed_height.url);
+              // Appending the paragraph and itemImage we created to the "gifDiv" div we created
+              gifDiv.append(p);
+              gifDiv.append(itemImage); 
+              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+              $("#gifs-appear-here").prepend(gifDiv);
+            }
+          }
+        });
+    });
+    
