@@ -82,9 +82,9 @@ input#add-item{
 	box-sizing: border-box;
 	width: 100%;
 	text-align: left;
-	font: bold 16px sans-serif;
+	font: bold 12px sans-serif;
 	height: 150px;
-	padding: 10px 15px;
+	padding: 2px 5px;
 	margin-top: 5px;
 }
 
