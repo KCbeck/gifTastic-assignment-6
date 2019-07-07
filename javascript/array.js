@@ -57,11 +57,27 @@ $("body").on("click", "button", function() {
               var p = $("<p>").text("Rating: " + rating);
               // Creating an image tag
               var itemImage = $("<img>");
-              $("itemImage").addClass("photo")
-          
+              $(itemImage).addClass("photo")
+              $(itemImage).attr("data-fixed", results[i].images.fixed_height_still.url);
+              $(itemImage).attr("data-animated", results[i].images.fixed_height.url);
+              $(itemImage).attr("data-state", "still");
               // Giving the image tag an src attribute of a proprty pulled off the
               // result item
-              itemImage.attr("src", results[i].images.fixed_height.url);
+              itemImage.attr("src", results[i].images.fixed_height_still.url);
+              console.log(results[i]);
+                $(itemImage).click(function() {
+                  if ($(this).attr("data-state")==="still") {
+                    $(this).attr("data-state", "animated");
+                    var animatedSource = $(this).attr("data-animated")
+                    $(this).attr("src", animatedSource)
+                  } else { 
+                    $(this).attr("data-state", "still");
+                    var stillSource = $(this).attr("data-fixed")
+                    $(this).attr("src", stillSource)
+                    // block of code to be executed if the condition is false
+                  }
+                }); 
+              }
               // Appending the paragraph and itemImage we created to the "gifDiv" div we created
               gifDiv.append(p);
               gifDiv.append(itemImage); 
@@ -69,6 +85,6 @@ $("body").on("click", "button", function() {
               $("#gifs-appear-here").prepend(gifDiv);
             }
           }
-        });
-    });
+)});
+ 
     
